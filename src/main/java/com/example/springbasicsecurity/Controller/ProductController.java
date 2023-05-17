@@ -16,6 +16,8 @@ public class ProductController {
     @Autowired
     ProductService productService;
     @GetMapping("/welcome")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')")
+    //welcome endpoint is open to use by ADMIN and EMPLOYEE only.
     public String greeting(){
         return  "Welcome to Spring Security Example";
     }
@@ -26,9 +28,10 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-    @PostMapping("")
-    public String addUser(UserInfo userInfo){
-
+    @PostMapping("/new")
+    //new endpoint is open to use by anyone.
+    public String addNewUser(@RequestBody UserInfo userInfo){
+        return productService.addUser(userInfo);
     }
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
